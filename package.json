@@ -4,7 +4,7 @@
   },
   "description": "Proof Gatekeeper agent for zkVerify Agent Games (Season 01): a public HTTPS endpoint that deterministically approves or rejects proof-backed payment tasks and proves each decision with a Groth16 zero-knowledge proof, verified on zkVerify mainnet via Kurier.",
   "engines": {
-    "node": ">=20"
+    "node": "22.x"
   },
   "license": "MIT",
   "name": "agent-games-proof-gatekeeper",
