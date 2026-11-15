@@ -74,7 +74,7 @@ function createAgentServer() {
   });
 }
 
-if (require.main === module) {
+if (require.main === module || process.env.VERCEL) {
   const cfg = loadConfig();
   const server = createAgentServer();
   server.listen(cfg.port, () => {
