@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "snarkjs": "0.7.6"
+  },
+  "description": "Proof Gatekeeper agent for zkVerify Agent Games (Season 01): a public HTTPS endpoint that deterministically approves or rejects proof-backed payment tasks and proves each decision with a Groth16 zero-knowledge proof, verified on zkVerify mainnet via Kurier.",
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "main": "src/server.js",
+  "name": "agent-games-proof-gatekeeper",
+  "scripts": {
+    "probe": "node scripts/probe-signals.mjs",
+    "smoke": "node scripts/smoke-test.js",
+    "start": "node src/server.js",
+    "test": "node --test --test-force-exit test/test.js"
+  },
+  "version": "1.0.0"
+}
