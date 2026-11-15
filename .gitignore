@@ -1,0 +1,7 @@
+# Secrets — never commit these.
+.env
+data/
+node_modules/
+
+# OS / editor noise
+.DS_Store
