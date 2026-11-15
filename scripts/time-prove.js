@@ -1,0 +1,21 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const snarkjs = require('snarkjs');
+const { buildCircuitInputs, parseInput } = require('../src/decision');
+const { deriveSalt } = require('../src/hmac');
+const SECRET = 'test-secret-32-bytes-long-value!';
+const VK = '0x6b79c6012a6d8651f3e13bc4d2a20370280ab49700c90c5316d4168bfbad77b0';
+const envelope = { type: 'agent-games.proof-gatekeeper.v1', task_id: 'gk_time_001', issued_at: new Date().toISOString(), deadline_at: new Date(Date.now()+60000).toISOString(), input: { registered_vk: VK, proof_vk: VK, minimum: '1000', public_balance: '1460', expiry_block: 5000, current_block: 4990, recipient: '0x1111111111111111111111111111111111111111', condition_recipient: '0x1111111111111111111111111111111111111111', amount: '500', max_transfer: '1000', proof_tx: '0xtime001' } };
+(async () => {
+  const parsed = parseInput(envelope.input);
+  const inputs = buildCircuitInputs(envelope, parsed, 'APPROVE', deriveSalt(SECRET, envelope.task_id));
+  const t0 = Date.now();
+  const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, require('node:path').join(__dirname, '..', 'circuits', 'gatekeeper.wasm'), require('node:path').join(__dirname, '..', 'circuits', 'gatekeeper_final.zkey'));
+  console.log('fullProve took', Date.now() - t0, 'ms; signals:', publicSignals.length, 'decision:', publicSignals[11]);
+  const vk = JSON.parse(fs.readFileSync(require('node:path').join(__dirname, '..', 'circuits', 'verification_key.json'), 'utf8'));
+  const t1 = Date.now();
+  const ok = await snarkjs.groth16.verify(vk, publicSignals, proof);
+  console.log('verify took', Date.now() - t1, 'ms; valid:', ok);
+  console.log('DONE-PROVING');
+  process.exit(0);
+})().catch(e => { console.error('ERR', e.message); process.exit(1); });
