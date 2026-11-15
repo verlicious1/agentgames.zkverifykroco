@@ -1,1 +1,1 @@
-{"functions":{"src/server.js":{"includeFiles":"circuits/**"}}}
+{"functions":{"api/agent.js":{"includeFiles":"circuits/**"}},"rewrites":[{"destination":"/api/agent","source":"/agent"}]}
